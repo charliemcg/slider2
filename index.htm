@@ -196,7 +196,6 @@
     <div class="master">
       <div class="title">CAR LOAN CALCULATOR</div>
       <div class="slidecontainer">
-        <div class="big-total">$<span id="demo"></span></div>
         <div class="slide-wrapper">
           <input
             type="range"
@@ -205,7 +204,19 @@
             max="50000"
             value="20000"
             class="slider"
-            id="myRange"
+            id="loanRange"
+          />
+          <div class="plus">+</div>
+        </div>
+        <div class="slide-wrapper">
+          <input
+            type="range"
+            step="100"
+            min="0"
+            max="50000"
+            value="20000"
+            class="slider"
+            id="balloonRange"
           />
           <div class="plus">+</div>
         </div>
@@ -245,13 +256,15 @@
           </span>
         </div>
       </div>
+      <div class="big-total">$<span id="demo"></span></div>
       <!-- button doesn't do anything -->
       <a href="#" class="btn">APPLY NOW</a>
     </div>
 
     <script>
       // declaring variables
-      var slider = document.getElementById("myRange");
+      var loanSlider = document.getElementById("loanRange");
+      var balloonSlider = document.getElementById("balloonRange");
       var output = document.getElementById("demo");
       var output2 = document.getElementById("amount");
       var lengthValue = document.getElementById("lengthValue");
@@ -259,9 +272,11 @@
       var repayments = document.getElementById("repayments");
       var repaymantsLabel = document.getElementById("repaymentsLabel");
       // total above slider
-      output.innerHTML = slider.value;
+      output.innerHTML = loanSlider.value;
+      output.innerHTML = balloonSlider.value;
       // total below slider
-      output2.innerHTML = slider.value;
+      output2.innerHTML = loanSlider.value;
+      output2.innerHTML = balloonSlider.value;
 
       // actions to occur when moving the slider
       slider.oninput = function () {
@@ -274,11 +289,17 @@
       };
 
       // dynamically adjust the background colors
-      slider.addEventListener("mousemove", function () {
-        var x = slider.value / 500;
+      loanSlider.addEventListener("mousemove", function () {
+        var x = loanSlider.value / 500;
         var color =
           "linear-gradient(90deg, #fed0fb " + x + "%, white " + x + "%)";
-        slider.style.background = color;
+        loanSlider.style.background = color;
+      });
+      balloonSlider.addEventListener("mousemove", function () {
+        var x = balloonSlider.value / 500;
+        var color =
+          "linear-gradient(90deg, #fed0fb " + x + "%, white " + x + "%)";
+        balloonSlider.style.background = color;
       });
 
       // actions to occur when changing repayment frequency
