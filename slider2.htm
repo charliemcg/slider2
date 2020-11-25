@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      .master {
+        width: 330px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial;
+      }
+
+      .title {
+        font-size: 14px;
+        font-weight: bold;
+        width: 100%;
+        padding: 15px 0px 15px 25px;
+      }
+
+      .slidecontainer {
+        width: 100%;
+        background: #fdfdfd;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 18px;
+      }
+
+      .slide-wrapper {
+        display: flex;
+        width: 78%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .slider {
+        -webkit-appearance: none;
+        width: 90%;
+        height: 17px;
+        background: linear-gradient(90deg, #fed0fb 40%, white 40%);
+        outline: none;
+        opacity: 0.7;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        -webkit-transition: 0.2s;
+        transition: opacity 0.2s;
+      }
+
+      .slider:hover {
+        opacity: 1;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        border: none;
+        height: 32px;
+        width: 32px;
+        /* specify the logo image here */
+        background: url("https://www.clipartmax.com/png/small/100-1003682_homer2-homer-simpson-crazy-png.png")
+          no-repeat;
+        background-size: 32px 32px;
+        border-radius: 0 !important;
+      }
+
+      .slider::-moz-range-thumb {
+        width: 32px;
+        height: 32px;
+        /* and here */
+        background: url("https://www.clipartmax.com/png/small/100-1003682_homer2-homer-simpson-crazy-png.png")
+          no-repeat;
+        background-size: 32px 32px;
+        cursor: pointer;
+        border: none;
+        border-radius: 0px;
+      }
+
+      .big-total {
+        font-size: 28px;
+        margin: 18px 0px;
+      }
+
+      .plus {
+        color: #bbb;
+        margin-right: 5px;
+      }
+
+      .loan-amount {
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        margin-top: 25px;
+      }
+
+      .amount {
+        background: #f0f0f0;
+        width: calc(78% - 15px);
+        border-radius: 3px;
+        padding: 7px 0px 7px 15px;
+        margin-bottom: 17px;
+        font-size: 14px;
+      }
+
+      .row {
+        font-size: 12px;
+        width: 78%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin: 14px 0px;
+      }
+
+      .label {
+        font-weight: bold;
+        max-width: 56%;
+      }
+
+      .selectable {
+        width: 43%;
+      }
+
+      .value {
+        font-family: "Arial";
+        display: inline-block;
+        width: calc(100% - 10px);
+        padding: 9px 0px 9px 10px;
+        outline: 0;
+        border: 0px solid #000000;
+        border-radius: 3px;
+        background: #f0f0f0;
+        color: #000000;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
+
+      .selectable select {
+        font-family: "Arial";
+        display: inline-block;
+        font-size: 12px;
+        width: 100%;
+        cursor: pointer;
+        padding: 7px 0px 7px 10px;
+        outline: 0;
+        border: 0px solid #000000;
+        border-radius: 5px;
+        background: #f0f0f0;
+        color: #000000;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
+
+      .selectable select::-ms-expand {
+        display: none;
+      }
+
+      .selectable select:hover,
+      .selectable select:focus {
+        color: #000000;
+        background: #e6e6e6;
+      }
+
+      .select select:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      .btn {
+        background: #d444ca;
+        border-radius: 4px;
+        display: inline-block;
+        cursor: pointer;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 11px 80px;
+        margin: 20px 0px;
+        text-decoration: none;
+        text-shadow: 0px 1px 0px #2f6627;
+      }
+
+      .btn:hover {
+        background: #e85ade;
+      }
+
+      .btn:active {
+        position: relative;
+        top: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="master">
+      <div class="title">CAR LOAN CALCULATOR</div>
+      <div class="slidecontainer">
+        <div class="big-total">$<span id="demo"></span></div>
+        <div class="slide-wrapper">
+          <input
+            type="range"
+            step="100"
+            min="0"
+            max="50000"
+            value="20000"
+            class="slider"
+            id="myRange"
+          />
+          <div class="plus">+</div>
+        </div>
+        <div class="loan-amount">LOAN AMOUNT</div>
+        <div id="amount" class="amount"></div>
+        <div class="row">
+          <span class="label">INTEREST RATE</span>
+          <!-- interest rate is stuck at 4%. Is it supposed to be changeable? -->
+          <span class="selectable"><span class="value">4.0%</span></span>
+        </div>
+        <div class="row">
+          <div class="label">LENGTH</div>
+          <div class="selectable">
+            <select name="length" id="lengthValue">
+              <option value="2">2 YEARS</option>
+              <option value="3">3 YEARS</option>
+              <option value="4">4 YEARS</option>
+              <option value="5">5 YEARS</option>
+              <option value="6">6 YEARS</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <span class="label">PAYMENT FREQUENCY</span>
+          <span class="selectable">
+            <select name="frequency" id="frequencyValue">
+              <option value="52">WEEKLY</option>
+              <option value="26">FORTNIGHTLY</option>
+              <option value="12">MONTHLY</option>
+            </select></span
+          >
+        </div>
+        <div class="row">
+          <span class="label" id="repaymentsLabel">WEEKLY REPAYMENT</span>
+          <span class="selectable">
+            <span class="value">$<span id="repayments">200.00</span></span>
+          </span>
+        </div>
+      </div>
+      <!-- button doesn't do anything -->
+      <a href="#" class="btn">APPLY NOW</a>
+    </div>
+
+    <script>
+      // declaring variables
+      var slider = document.getElementById("myRange");
+      var output = document.getElementById("demo");
+      var output2 = document.getElementById("amount");
+      var lengthValue = document.getElementById("lengthValue");
+      var frequencyValue = document.getElementById("frequencyValue");
+      var repayments = document.getElementById("repayments");
+      var repaymantsLabel = document.getElementById("repaymentsLabel");
+      // total above slider
+      output.innerHTML = slider.value;
+      // total below slider
+      output2.innerHTML = slider.value;
+
+      // actions to occur when moving the slider
+      slider.oninput = function () {
+        output.innerHTML = this.value;
+        output2.innerHTML = this.value;
+        repayments.innerHTML = (
+          (this.value * 1.04) /
+          (frequencyValue.value * lengthValue.value)
+        ).toFixed(2);
+      };
+
+      // dynamically adjust the background colors
+      slider.addEventListener("mousemove", function () {
+        var x = slider.value / 500;
+        var color =
+          "linear-gradient(90deg, #fed0fb " + x + "%, white " + x + "%)";
+        slider.style.background = color;
+      });
+
+      // actions to occur when changing repayment frequency
+      frequencyValue.onchange = function () {
+        repaymentsLabel.innerHTML =
+          this.options[this.selectedIndex].text + " REPAYMENT";
+        repayments.innerHTML = (
+          (slider.value * 1.04) /
+          (this.value * lengthValue.value)
+        ).toFixed(2);
+      };
+
+      // changes to occur when changing the length of loan
+      lengthValue.onchange = function () {
+        repayments.innerHTML = (
+          (slider.value * 1.04) /
+          (frequencyValue.value * this.value)
+        ).toFixed(2);
+      };
+    </script>
+  </body>
+</html>
