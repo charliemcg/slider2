@@ -4,11 +4,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       .master {
-        width: 330px;
+        width: 800px;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
         font-family: Arial;
+        border: 1px solid red;
+        padding: 23px;
+      }
+
+      .right-section {
+        background: #eefafa;
+        border-radius: 7px;
+        padding: 20px;
       }
 
       .title {
@@ -18,31 +26,34 @@
         padding: 15px 0px 15px 25px;
       }
 
-      .slidecontainer {
-        width: 100%;
-        background: #fdfdfd;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-bottom: 18px;
+      .slide-container {
+        width: 400px;
+      }
+
+      .slide-container-label {
+        color: #878787;
+        font-size: 12px;
+      }
+
+      .slide-container-amount {
+        font-size: 14px;
       }
 
       .slide-wrapper {
         display: flex;
-        width: 78%;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 10px 0px;
       }
 
       .slider {
         -webkit-appearance: none;
         width: 90%;
-        height: 17px;
-        background: linear-gradient(90deg, #fed0fb 40%, white 40%);
+        height: 5px;
+        background: linear-gradient(90deg, #25bdbf 40%, white 40%);
         outline: none;
         opacity: 0.7;
-        border: 1px solid #ddd;
         border-radius: 3px;
         -webkit-transition: 0.2s;
         transition: opacity 0.2s;
@@ -54,52 +65,45 @@
 
       input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;
-        border: none;
-        height: 32px;
-        width: 32px;
-        /* specify the logo image here */
-        background: url("https://www.clipartmax.com/png/small/100-1003682_homer2-homer-simpson-crazy-png.png")
-          no-repeat;
-        background-size: 32px 32px;
-        border-radius: 0 !important;
+        border: 3px solid #25bdbf;
+        height: 19px;
+        width: 19px;
+        border-radius: 15px;
+        background: #ffffff;
+        cursor: pointer;
+        margin-top: 0px;
+        box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
       }
 
-      .slider::-moz-range-thumb {
-        width: 32px;
-        height: 32px;
-        /* and here */
-        background: url("https://www.clipartmax.com/png/small/100-1003682_homer2-homer-simpson-crazy-png.png")
-          no-repeat;
-        background-size: 32px 32px;
+      input[type="range"]::-moz-range-thumb {
+        box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+        border: 3px solid #25bdbf;
+        height: 19px;
+        width: 19px;
+        border-radius: 15px;
+        background: #ffffff;
         cursor: pointer;
-        border: none;
-        border-radius: 0px;
+      }
+
+      input[type="range"]::-ms-thumb {
+        box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+        border: 3px solid #25bdbf;
+        height: 19px;
+        width: 19px;
+        border-radius: 15px;
+        background: #ffffff;
+        cursor: pointer;
       }
 
       .big-total {
-        font-size: 28px;
+        font-size: 48px;
         margin: 18px 0px;
+        color: #09595a;
       }
 
       .plus {
         color: #bbb;
         margin-right: 5px;
-      }
-
-      .loan-amount {
-        font-size: 12px;
-        font-weight: bold;
-        margin-bottom: 8px;
-        margin-top: 25px;
-      }
-
-      .amount {
-        background: #f0f0f0;
-        width: calc(78% - 15px);
-        border-radius: 3px;
-        padding: 7px 0px 7px 15px;
-        margin-bottom: 17px;
-        font-size: 14px;
       }
 
       .row {
@@ -129,7 +133,7 @@
         outline: 0;
         border: 0px solid #000000;
         border-radius: 3px;
-        background: #f0f0f0;
+        background: #eefafa;
         color: #000000;
         appearance: none;
         -webkit-appearance: none;
@@ -146,7 +150,7 @@
         outline: 0;
         border: 0px solid #000000;
         border-radius: 5px;
-        background: #f0f0f0;
+        background: #eefafa;
         color: #000000;
         appearance: none;
         -webkit-appearance: none;
@@ -169,11 +173,11 @@
       }
 
       .btn {
-        background: #d444ca;
-        border-radius: 4px;
+        background: #feca31;
+        border-radius: 20px;
         display: inline-block;
         cursor: pointer;
-        color: #ffffff;
+        color: #444;
         font-size: 12px;
         font-weight: bold;
         padding: 11px 80px;
@@ -190,45 +194,53 @@
         position: relative;
         top: 1px;
       }
+
+      .label-text {
+        color: #878787;
+        font-size: 12px;
+      }
     </style>
   </head>
   <body>
     <div class="master">
-      <div class="title">CAR LOAN CALCULATOR</div>
-      <div class="slidecontainer">
-        <div class="slide-wrapper">
-          <input
-            type="range"
-            step="100"
-            min="0"
-            max="50000"
-            value="20000"
-            class="slider"
-            id="loanRange"
-          />
-          <div class="plus">+</div>
+      <div class="left-section">
+        <div class="slide-container">
+          <div class="slide-container-label">LOAN AMOUNT</div>
+          <div id="amount" class="slide-container-amount"></div>
+          <div class="slide-wrapper">
+            <input
+              type="range"
+              step="100"
+              min="0"
+              max="50000"
+              value="20000"
+              class="slider"
+              id="loanRange"
+            />
+          </div>
         </div>
-        <div class="slide-wrapper">
-          <input
-            type="range"
-            step="100"
-            min="0"
-            max="50000"
-            value="20000"
-            class="slider"
-            id="balloonRange"
-          />
-          <div class="plus">+</div>
+        <div class="slide-container">
+          <div class="slide-container-label">BALLOON PAYMENT</div>
+          <div id="amount" class="amount"></div>
+          <div class="slide-wrapper">
+            <input
+              type="range"
+              step="100"
+              min="0"
+              max="50000"
+              value="20000"
+              class="slider"
+              id="balloonRange"
+            />
+          </div>
         </div>
-        <div class="loan-amount">LOAN AMOUNT</div>
-        <div id="amount" class="amount"></div>
         <div class="row">
-          <span class="label">INTEREST RATE</span>
+          <span class="label-text">INTEREST RATE</span>
           <!-- interest rate is stuck at 4%. Is it supposed to be changeable? -->
           <span class="selectable"><span class="value">4.0%</span></span>
         </div>
         <div class="row">
-          <div class="label">LENGTH</div>
+          <div class="label-text">LENGTH</div>
           <div class="selectable">
             <select name="length" id="lengthValue">
               <option value="2">2 YEARS</option>
@@ -240,7 +252,7 @@
           </div>
         </div>
         <div class="row">
-          <span class="label">PAYMENT FREQUENCY</span>
+          <span class="label-text">PAYMENT FREQUENCY</span>
           <span class="selectable">
             <select name="frequency" id="frequencyValue">
               <option value="52">WEEKLY</option>
@@ -249,16 +261,20 @@
             </select></span
           >
         </div>
-        <div class="row">
+        <!-- <div class="row">
           <span class="label" id="repaymentsLabel">WEEKLY REPAYMENT</span>
           <span class="selectable">
             <span class="value">$<span id="repayments">200.00</span></span>
           </span>
-        </div>
+        </div> -->
       </div>
-      <div class="big-total">$<span id="demo"></span></div>
-      <!-- button doesn't do anything -->
-      <a href="#" class="btn">APPLY NOW</a>
+      <div class="right-section">
+        <div class="label-text">YOUR TOTAL PAYMENT WILL BE</div>
+        <div class="big-total">$<span id="demo"></span></div>
+        <div class="label-text">AMOUNT BORROWED</div>
+        <!-- button doesn't do anything -->
+        <a href="#" class="btn">GET A QUOTE</a>
+      </div>
     </div>
 
     <script>
