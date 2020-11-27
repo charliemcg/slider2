@@ -41,17 +41,16 @@
 
       .slide-wrapper {
         display: flex;
-        display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 10px 0px;
       }
 
-      .slider {
+      .loan-slider {
         -webkit-appearance: none;
         width: 90%;
         height: 5px;
-        background: linear-gradient(90deg, #25bdbf 40%, white 40%);
+        background: linear-gradient(90deg, #25bdbf 25%, #f4f1f1 20%);
         outline: none;
         opacity: 0.7;
         border-radius: 3px;
@@ -59,7 +58,23 @@
         transition: opacity 0.2s;
       }
 
-      .slider:hover {
+      .balloon-slider {
+        -webkit-appearance: none;
+        width: 90%;
+        height: 5px;
+        background: linear-gradient(90deg, #25bdbf 66%, #f4f1f1 40%);
+        outline: none;
+        opacity: 0.7;
+        border-radius: 3px;
+        -webkit-transition: 0.2s;
+        transition: opacity 0.2s;
+      }
+
+      .loan-slider:hover {
+        opacity: 1;
+      }
+
+      .balloon-slider:hover {
         opacity: 1;
       }
 
@@ -99,11 +114,6 @@
         font-size: 48px;
         margin: 18px 0px;
         color: #09595a;
-      }
-
-      .plus {
-        color: #bbb;
-        margin-right: 5px;
       }
 
       .row {
@@ -164,7 +174,7 @@
       .selectable select:hover,
       .selectable select:focus {
         color: #000000;
-        background: #e6e6e6;
+        background: #edfcfc;
       }
 
       .select select:disabled {
@@ -183,11 +193,10 @@
         padding: 11px 80px;
         margin: 20px 0px;
         text-decoration: none;
-        text-shadow: 0px 1px 0px #2f6627;
       }
 
       .btn:hover {
-        background: #e85ade;
+        background: #ffd763;
       }
 
       .btn:active {
@@ -206,31 +215,31 @@
       <div class="left-section">
         <div class="slide-container">
           <div class="slide-container-label">LOAN AMOUNT</div>
-          <div id="amount" class="slide-container-amount"></div>
+          <div id="loan-amount" class="slide-container-amount"></div>
           <div class="slide-wrapper">
             <input
               type="range"
-              step="100"
+              step="1000"
               min="0"
-              max="50000"
-              value="20000"
-              class="slider"
-              id="loanRange"
+              max="200000"
+              value="50000"
+              class="loan-slider"
+              id="loan-range"
             />
           </div>
         </div>
         <div class="slide-container">
           <div class="slide-container-label">BALLOON PAYMENT</div>
-          <div id="amount" class="amount"></div>
+          <div id="balloon-amount" class="slide-container-amount"></div>
           <div class="slide-wrapper">
             <input
               type="range"
-              step="100"
+              step="1000"
               min="0"
-              max="50000"
-              value="20000"
-              class="slider"
-              id="balloonRange"
+              max="15000"
+              value="10000"
+              class="balloon-slider"
+              id="balloon-range"
             />
           </div>
         </div>
@@ -279,25 +288,36 @@
 
     <script>
       // declaring variables
-      var loanSlider = document.getElementById("loanRange");
-      var balloonSlider = document.getElementById("balloonRange");
+      var loanSlider = document.getElementById("loan-range");
+      var balloonSlider = document.getElementById("balloon-range");
+      var loanAmountOutput = document.getElementById("loan-amount");
+      var balloonAmountOutput = document.getElementById("balloon-amount");
       var output = document.getElementById("demo");
-      var output2 = document.getElementById("amount");
       var lengthValue = document.getElementById("lengthValue");
       var frequencyValue = document.getElementById("frequencyValue");
       var repayments = document.getElementById("repayments");
       var repaymantsLabel = document.getElementById("repaymentsLabel");
       // total above slider
       output.innerHTML = loanSlider.value;
-      output.innerHTML = balloonSlider.value;
+      // output.innerHTML = balloonSlider.value;
       // total below slider
-      output2.innerHTML = loanSlider.value;
-      output2.innerHTML = balloonSlider.value;
+      loanAmountOutput.innerHTML = loanSlider.value;
+      balloonAmountOutput.innerHTML = balloonSlider.value;
 
-      // actions to occur when moving the slider
-      slider.oninput = function () {
+      // actions to occur when moving the loan slider
+      loanSlider.oninput = function () {
         output.innerHTML = this.value;
-        output2.innerHTML = this.value;
+        loanAmountOutput.innerHTML = this.value;
+        repayments.innerHTML = (
+          (this.value * 1.04) /
+          (frequencyValue.value * lengthValue.value)
+        ).toFixed(2);
+      };
+
+      // actions to occur when moving the balloon slider
+      balloonSlider.oninput = function () {
+        output.innerHTML = this.value;
+        balloonAmountOutput.innerHTML = this.value;
         repayments.innerHTML = (
           (this.value * 1.04) /
           (frequencyValue.value * lengthValue.value)
@@ -306,15 +326,15 @@
 
       // dynamically adjust the background colors
       loanSlider.addEventListener("mousemove", function () {
-        var x = loanSlider.value / 500;
+        var x = loanSlider.value / 2000;
         var color =
-          "linear-gradient(90deg, #fed0fb " + x + "%, white " + x + "%)";
+          "linear-gradient(90deg, #25bdbf " + x + "%, #f4f1f1 " + x + "%)";
         loanSlider.style.background = color;
       });
       balloonSlider.addEventListener("mousemove", function () {
-        var x = balloonSlider.value / 500;
+        var x = balloonSlider.value / 150;
         var color =
-          "linear-gradient(90deg, #fed0fb " + x + "%, white " + x + "%)";
+          "linear-gradient(90deg, #25bdbf " + x + "%, #f4f1f1 " + x + "%)";
         balloonSlider.style.background = color;
       });
 
@@ -323,7 +343,7 @@
         repaymentsLabel.innerHTML =
           this.options[this.selectedIndex].text + " REPAYMENT";
         repayments.innerHTML = (
-          (slider.value * 1.04) /
+          (loanSlider.value * 1.04) /
           (this.value * lengthValue.value)
         ).toFixed(2);
       };
@@ -331,7 +351,7 @@
       // changes to occur when changing the length of loan
       lengthValue.onchange = function () {
         repayments.innerHTML = (
-          (slider.value * 1.04) /
+          (loanSlider.value * 1.04) /
           (frequencyValue.value * this.value)
         ).toFixed(2);
       };
