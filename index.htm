@@ -4,13 +4,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       .master {
-        width: 800px;
+        width: 680px;
         display: flex;
         flex-direction: row;
         align-items: center;
         font-family: Arial;
         border: 1px solid red;
         padding: 23px;
+      }
+
+      .right-container {
+        height: 300px;
+        width: 270px;
       }
 
       .right-section {
@@ -28,6 +33,7 @@
 
       .slide-container {
         width: 400px;
+        margin-bottom: 35px;
       }
 
       .slide-container-label {
@@ -111,9 +117,31 @@
       }
 
       .big-total {
-        font-size: 48px;
         margin: 18px 0px;
         color: #09595a;
+        display: flex;
+        font-family: "Comic Sans MS", "Comic Sans", cursive;
+      }
+
+      .dollar-sign {
+        font-size: 20px;
+        display: flex;
+        margin-top: 8px;
+      }
+
+      .dollars {
+        font-size: 60px;
+      }
+
+      .cents {
+        font-size: 20px;
+        display: flex;
+        align-items: flex-end;
+        margin-bottom: 6px;
+      }
+
+      .rows {
+        margin-top: 65px;
       }
 
       .row {
@@ -123,7 +151,7 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        margin: 14px 0px;
+        margin: 5px 0px;
       }
 
       .label {
@@ -139,7 +167,7 @@
         font-family: "Arial";
         display: inline-block;
         width: calc(100% - 10px);
-        padding: 9px 0px 9px 10px;
+        padding: 3px 0px 3px 10px;
         outline: 0;
         border: 0px solid #000000;
         border-radius: 3px;
@@ -156,7 +184,7 @@
         font-size: 12px;
         width: 100%;
         cursor: pointer;
-        padding: 7px 0px 7px 10px;
+        padding: 3px 0px 3px 10px;
         outline: 0;
         border: 0px solid #000000;
         border-radius: 5px;
@@ -182,17 +210,34 @@
         pointer-events: none;
       }
 
+      .borrowed-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 30px;
+      }
+
+      .borrowed-amount {
+        background: #c5eded;
+        border-radius: 3px;
+        font-size: 12px;
+        color: #878787;
+        padding: 3px 35px 3px 3px;
+      }
+
       .btn {
         background: #feca31;
         border-radius: 20px;
-        display: inline-block;
         cursor: pointer;
         color: #444;
         font-size: 12px;
         font-weight: bold;
-        padding: 11px 80px;
-        margin: 20px 0px;
+        padding: 12px 42px;
         text-decoration: none;
+        position: absolute;
+        top: 235px;
+        left: 460px;
       }
 
       .btn:hover {
@@ -243,32 +288,34 @@
             />
           </div>
         </div>
-        <div class="row">
-          <span class="label-text">INTEREST RATE</span>
-          <!-- interest rate is stuck at 4%. Is it supposed to be changeable? -->
-          <span class="selectable"><span class="value">4.0%</span></span>
-        </div>
-        <div class="row">
-          <div class="label-text">LENGTH</div>
-          <div class="selectable">
-            <select name="length" id="lengthValue">
-              <option value="2">2 YEARS</option>
-              <option value="3">3 YEARS</option>
-              <option value="4">4 YEARS</option>
-              <option value="5">5 YEARS</option>
-              <option value="6">6 YEARS</option>
-            </select>
+        <div class="rows">
+          <div class="row">
+            <span class="label-text">INTEREST RATE</span>
+            <!-- interest rate is stuck at 4%. Is it supposed to be changeable? -->
+            <span class="selectable"><span class="value">4.0%</span></span>
           </div>
-        </div>
-        <div class="row">
-          <span class="label-text">PAYMENT FREQUENCY</span>
-          <span class="selectable">
-            <select name="frequency" id="frequencyValue">
-              <option value="52">WEEKLY</option>
-              <option value="26">FORTNIGHTLY</option>
-              <option value="12">MONTHLY</option>
-            </select></span
-          >
+          <div class="row">
+            <div class="label-text">LENGTH</div>
+            <div class="selectable">
+              <select name="length" id="lengthValue">
+                <option value="2">2 YEARS</option>
+                <option value="3">3 YEARS</option>
+                <option value="4">4 YEARS</option>
+                <option value="5">5 YEARS</option>
+                <option value="6">6 YEARS</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <span class="label-text">PAYMENT FREQUENCY</span>
+            <span class="selectable">
+              <select name="frequency" id="frequencyValue">
+                <option value="52">WEEKLY</option>
+                <option value="26">FORTNIGHTLY</option>
+                <option value="12">MONTHLY</option>
+              </select></span
+            >
+          </div>
         </div>
         <!-- <div class="row">
           <span class="label" id="repaymentsLabel">WEEKLY REPAYMENT</span>
@@ -277,12 +324,21 @@
           </span>
         </div> -->
       </div>
-      <div class="right-section">
-        <div class="label-text">YOUR TOTAL PAYMENT WILL BE</div>
-        <div class="big-total">$<span id="demo"></span></div>
-        <div class="label-text">AMOUNT BORROWED</div>
-        <!-- button doesn't do anything -->
-        <a href="#" class="btn">GET A QUOTE</a>
+      <div class="right-container">
+        <div class="right-section">
+          <div class="label-text">YOUR TOTAL PAYMENT WILL BE</div>
+          <div class="big-total">
+            <span class="dollar-sign">$</span
+            ><span id="dollars" class="dollars"></span
+            ><span class="cents">.00</span>
+          </div>
+          <div class="borrowed-container">
+            <div class="label-text">AMOUNT BORROWED</div>
+            <div class="borrowed-amount">$40,000</div>
+          </div>
+          <!-- button doesn't do anything -->
+          <a href="#" class="btn">GET A QUOTE</a>
+        </div>
       </div>
     </div>
 
@@ -292,7 +348,7 @@
       var balloonSlider = document.getElementById("balloon-range");
       var loanAmountOutput = document.getElementById("loan-amount");
       var balloonAmountOutput = document.getElementById("balloon-amount");
-      var output = document.getElementById("demo");
+      var output = document.getElementById("dollars");
       var lengthValue = document.getElementById("lengthValue");
       var frequencyValue = document.getElementById("frequencyValue");
       var repayments = document.getElementById("repayments");
@@ -306,7 +362,7 @@
 
       // actions to occur when moving the loan slider
       loanSlider.oninput = function () {
-        output.innerHTML = this.value;
+        output.innerHTML = this.value / 100;
         loanAmountOutput.innerHTML = this.value;
         repayments.innerHTML = (
           (this.value * 1.04) /
