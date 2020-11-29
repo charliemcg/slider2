@@ -159,6 +159,21 @@
         max-width: 56%;
       }
 
+      .interest {
+        font-family: "Arial";
+        display: inline-block;
+        width: calc(100% - 10px);
+        padding: 3px 0px 3px 10px;
+        outline: 0;
+        border: 0px solid #000000;
+        border-radius: 3px;
+        background: #eefafa;
+        color: #000000;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
+
       .selectable {
         width: 43%;
       }
@@ -200,7 +215,8 @@
       }
 
       .selectable select:hover,
-      .selectable select:focus {
+      .selectable select:focus,
+      .interest:hover {
         color: #000000;
         background: #edfcfc;
       }
@@ -287,7 +303,10 @@
           <div class="row">
             <span class="label-text">INTEREST RATE</span>
             <!-- interest rate is stuck at 4%. Is it supposed to be changeable? -->
-            <span class="selectable"><span class="value">4.0%</span></span>
+            <!-- <span class="selectable"><span class="value">4.0%</span></span> -->
+            <span class="selectable"
+              ><input type="text" id="interest-amount" class="interest"
+            /></span>
           </div>
           <div class="row">
             <div class="label-text">LENGTH</div>
@@ -312,12 +331,6 @@
             >
           </div>
         </div>
-        <!-- <div class="row">
-          <span class="label" id="repaymentsLabel">WEEKLY REPAYMENT</span>
-          <span class="selectable">
-            <span class="value">$<span id="repayments">200.00</span></span>
-          </span>
-        </div> -->
       </div>
       <div class="right-container">
         <div class="right-section">
