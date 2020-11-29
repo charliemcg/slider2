@@ -390,7 +390,9 @@
         amountOutput.innerHTML =
           "$" + getCurrency((this.value - balloonSlider.value).toString());
         repayments.innerHTML = (
-          ((this.value - balloonSlider.value) * 1.04) /
+          ((this.value - balloonSlider.value) *
+            (parseFloat(interestRate) / 100) +
+            (this.value - balloonSlider.value)) /
           (frequencyValue.value * lengthValue.value)
         )
           .toFixed(0)
@@ -403,7 +405,8 @@
         amountOutput.innerHTML =
           "$" + getCurrency((loanSlider.value - this.value).toString());
         repayments.innerHTML = (
-          ((loanSlider.value - this.value) * 1.04) /
+          ((loanSlider.value - this.value) * (parseFloat(interestRate) / 100) +
+            (loanSlider.value - this.value)) /
           (frequencyValue.value * lengthValue.value)
         ).toFixed(0);
       };
@@ -425,7 +428,9 @@
       // actions to occur when changing repayment frequency
       frequencyValue.onchange = function () {
         repayments.innerHTML = (
-          (loanSlider.value * 1.04) /
+          ((loanSlider.value - balloonSlider.value) *
+            (parseFloat(interestRate) / 100) +
+            (loanSlider.value - balloonSlider.value)) /
           (this.value * lengthValue.value)
         ).toFixed(0);
       };
@@ -433,7 +438,9 @@
       // changes to occur when changing the length of loan
       lengthValue.onchange = function () {
         repayments.innerHTML = (
-          (loanSlider.value * 1.04) /
+          ((loanSlider.value - balloonSlider.value) *
+            (parseFloat(interestRate) / 100) +
+            (loanSlider.value - balloonSlider.value)) /
           (frequencyValue.value * this.value)
         ).toFixed(0);
       };
@@ -450,7 +457,8 @@
         } else if (parseFloat(interestInput.value).toFixed(2) > 99) {
           alert("Must be less than 100");
         } else {
-          interestInput.value = "Success";
+          interestInput.value =
+            parseFloat(interestInput.value).toFixed(2) + "%";
           interestRate = interestInput.value;
         }
       };
