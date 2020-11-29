@@ -255,7 +255,7 @@
       <div class="left-section">
         <div class="slide-container">
           <div class="slide-container-label">LOAN AMOUNT</div>
-          <div id="loan-amount" class="slide-container-amount"></div>
+          <div id="loan-amount" class="slide-container-amount">$50,000</div>
           <div class="slide-wrapper">
             <input
               type="range"
@@ -270,7 +270,7 @@
         </div>
         <div class="slide-container">
           <div class="slide-container-label">BALLOON PAYMENT</div>
-          <div id="balloon-amount" class="slide-container-amount"></div>
+          <div id="balloon-amount" class="slide-container-amount">$10,000</div>
           <div class="slide-wrapper">
             <input
               type="range"
@@ -324,13 +324,13 @@
           <div class="label-text">YOUR TOTAL PAYMENT WILL BE</div>
           <div class="big-total">
             <span class="dollar-sign">$</span
-            ><span id="dollars" class="dollars"></span
+            ><span id="dollars" class="dollars">500</span
             ><span class="cents">.00</span>
           </div>
           <div class="borrowed-container">
             <div class="label-text">AMOUNT BORROWED</div>
             <div id="borrowed-amount" class="borrowed-amount-container">
-              40000
+              $40,000
             </div>
           </div>
           <!-- button doesn't do anything -->
@@ -346,43 +346,54 @@
       var loanAmountOutput = document.getElementById("loan-amount");
       var balloonAmountOutput = document.getElementById("balloon-amount");
       var amountOutput = document.getElementById("borrowed-amount");
-      var output = document.getElementById("dollars");
+      var repayments = document.getElementById("dollars");
       var lengthValue = document.getElementById("lengthValue");
       var frequencyValue = document.getElementById("frequencyValue");
-      var repayments = document.getElementById("repayments");
-      var repaymantsLabel = document.getElementById("repaymentsLabel");
-
-      // big total amount
-      output.innerHTML = loanSlider.value;
 
       // slider amounts
-      loanAmountOutput.innerHTML = loanSlider.value;
-      balloonAmountOutput.innerHTML = balloonSlider.value;
+      // loanAmountOutput.innerHTML = "$" + loanSlider.value;
+      // balloonAmountOutput.innerHTML = "$" + balloonSlider.value;
 
       //total borrowed amount
-      amountOutput.innerHTML = loanSlider.value - balloonSlider.value;
+      // amountOutput.innerHTML = loanSlider.value - balloonSlider.value;
+
+      var getCurrency = function (price) {
+        if (price.length > 3) {
+          var arr = price.split("");
+          var formattedArr = [];
+          for (var i = 0; i < arr.length; i++) {
+            if (i === arr.length - 3) {
+              formattedArr.push(",");
+            }
+            formattedArr.push(arr[i]);
+          }
+          return formattedArr.join("");
+        }
+        return price;
+      };
 
       // actions to occur when moving the loan slider
       loanSlider.oninput = function () {
-        output.innerHTML = this.value / 100;
-        loanAmountOutput.innerHTML = this.value;
-        amountOutput.innerHTML = this.value - balloonSlider.value;
+        loanAmountOutput.innerHTML = "$" + getCurrency(this.value);
+        amountOutput.innerHTML =
+          "$" + getCurrency((this.value - balloonSlider.value).toString());
         repayments.innerHTML = (
-          (this.value * 1.04) /
+          ((this.value - balloonSlider.value) * 1.04) /
           (frequencyValue.value * lengthValue.value)
-        ).toFixed(2);
+        )
+          .toFixed(0)
+          .replace(/\d(?=(\d{3})+\.)/g, "$&,");
       };
 
       // actions to occur when moving the balloon slider
       balloonSlider.oninput = function () {
-        output.innerHTML = this.value;
-        balloonAmountOutput.innerHTML = this.value;
-        amountOutput.innerHTML = loanSlider.value - this.value;
+        balloonAmountOutput.innerHTML = "$" + getCurrency(this.value);
+        amountOutput.innerHTML =
+          "$" + getCurrency((loanSlider.value - this.value).toString());
         repayments.innerHTML = (
-          (this.value * 1.04) /
+          ((loanSlider.value - this.value) * 1.04) /
           (frequencyValue.value * lengthValue.value)
-        ).toFixed(2);
-        // borrowedAmountOutput.innerHTML = this.value;
+        ).toFixed(0);
       };
 
       // dynamically adjust the background colors
@@ -401,12 +412,10 @@
 
       // actions to occur when changing repayment frequency
       frequencyValue.onchange = function () {
-        repaymentsLabel.innerHTML =
-          this.options[this.selectedIndex].text + " REPAYMENT";
         repayments.innerHTML = (
           (loanSlider.value * 1.04) /
           (this.value * lengthValue.value)
-        ).toFixed(2);
+        ).toFixed(0);
       };
 
       // changes to occur when changing the length of loan
@@ -414,7 +423,7 @@
         repayments.innerHTML = (
           (loanSlider.value * 1.04) /
           (frequencyValue.value * this.value)
-        ).toFixed(2);
+        ).toFixed(0);
       };
     </script>
   </body>
