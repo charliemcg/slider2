@@ -305,7 +305,11 @@
             <!-- interest rate is stuck at 4%. Is it supposed to be changeable? -->
             <!-- <span class="selectable"><span class="value">4.0%</span></span> -->
             <span class="selectable"
-              ><input type="text" id="interest-amount" class="interest"
+              ><input
+                type="text"
+                id="interest-amount"
+                class="interest"
+                value="4.00%"
             /></span>
           </div>
           <div class="row">
@@ -362,13 +366,8 @@
       var repayments = document.getElementById("dollars");
       var lengthValue = document.getElementById("lengthValue");
       var frequencyValue = document.getElementById("frequencyValue");
-
-      // slider amounts
-      // loanAmountOutput.innerHTML = "$" + loanSlider.value;
-      // balloonAmountOutput.innerHTML = "$" + balloonSlider.value;
-
-      //total borrowed amount
-      // amountOutput.innerHTML = loanSlider.value - balloonSlider.value;
+      var interestInput = document.getElementById("interest-amount");
+      var interestRate = 4;
 
       var getCurrency = function (price) {
         if (price.length > 3) {
@@ -437,6 +436,23 @@
           (loanSlider.value * 1.04) /
           (frequencyValue.value * this.value)
         ).toFixed(0);
+      };
+
+      interestInput.onfocus = function () {
+        interestInput.value = interestRate.toFixed(2);
+      };
+
+      interestInput.onblur = function () {
+        if (parseFloat(interestInput.value).toFixed(2) === "NaN") {
+          alert("Must enter number");
+        } else if (parseFloat(interestInput.value).toFixed(2) < 0) {
+          alert("Must be more than 0");
+        } else if (parseFloat(interestInput.value).toFixed(2) > 99) {
+          alert("Must be less than 100");
+        } else {
+          interestInput.value = "Success";
+          interestRate = interestInput.value;
+        }
       };
     </script>
   </body>
