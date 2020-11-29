@@ -120,21 +120,21 @@
         margin: 18px 0px;
         color: #09595a;
         display: flex;
-        font-family: "Comic Sans MS", "Comic Sans", cursive;
+        font-family: Arial, Helvetica, sans-serif;
       }
 
       .dollar-sign {
-        font-size: 20px;
+        font-size: 30px;
         display: flex;
         margin-top: 8px;
       }
 
       .dollars {
-        font-size: 60px;
+        font-size: 70px;
       }
 
       .cents {
-        font-size: 20px;
+        font-size: 30px;
         display: flex;
         align-items: flex-end;
         margin-bottom: 6px;
@@ -218,7 +218,7 @@
         padding-bottom: 30px;
       }
 
-      .borrowed-amount {
+      .borrowed-amount-container {
         background: #c5eded;
         border-radius: 3px;
         font-size: 12px;
@@ -236,17 +236,12 @@
         padding: 12px 42px;
         text-decoration: none;
         position: absolute;
-        top: 235px;
+        top: 233px;
         left: 460px;
       }
 
       .btn:hover {
         background: #ffd763;
-      }
-
-      .btn:active {
-        position: relative;
-        top: 1px;
       }
 
       .label-text {
@@ -334,7 +329,9 @@
           </div>
           <div class="borrowed-container">
             <div class="label-text">AMOUNT BORROWED</div>
-            <div class="borrowed-amount">$40,000</div>
+            <div id="borrowed-amount" class="borrowed-amount-container">
+              40000
+            </div>
           </div>
           <!-- button doesn't do anything -->
           <a href="#" class="btn">GET A QUOTE</a>
@@ -348,22 +345,28 @@
       var balloonSlider = document.getElementById("balloon-range");
       var loanAmountOutput = document.getElementById("loan-amount");
       var balloonAmountOutput = document.getElementById("balloon-amount");
+      var amountOutput = document.getElementById("borrowed-amount");
       var output = document.getElementById("dollars");
       var lengthValue = document.getElementById("lengthValue");
       var frequencyValue = document.getElementById("frequencyValue");
       var repayments = document.getElementById("repayments");
       var repaymantsLabel = document.getElementById("repaymentsLabel");
-      // total above slider
+
+      // big total amount
       output.innerHTML = loanSlider.value;
-      // output.innerHTML = balloonSlider.value;
-      // total below slider
+
+      // slider amounts
       loanAmountOutput.innerHTML = loanSlider.value;
       balloonAmountOutput.innerHTML = balloonSlider.value;
+
+      //total borrowed amount
+      amountOutput.innerHTML = loanSlider.value - balloonSlider.value;
 
       // actions to occur when moving the loan slider
       loanSlider.oninput = function () {
         output.innerHTML = this.value / 100;
         loanAmountOutput.innerHTML = this.value;
+        amountOutput.innerHTML = this.value - balloonSlider.value;
         repayments.innerHTML = (
           (this.value * 1.04) /
           (frequencyValue.value * lengthValue.value)
@@ -374,10 +377,12 @@
       balloonSlider.oninput = function () {
         output.innerHTML = this.value;
         balloonAmountOutput.innerHTML = this.value;
+        amountOutput.innerHTML = loanSlider.value - this.value;
         repayments.innerHTML = (
           (this.value * 1.04) /
           (frequencyValue.value * lengthValue.value)
         ).toFixed(2);
+        // borrowedAmountOutput.innerHTML = this.value;
       };
 
       // dynamically adjust the background colors
