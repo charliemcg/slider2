@@ -9,8 +9,8 @@
         flex-direction: row;
         align-items: center;
         font-family: Arial;
-        border: 1px solid red;
         padding: 23px;
+        height: 300px;
       }
 
       .right-container {
@@ -56,7 +56,7 @@
         -webkit-appearance: none;
         width: 90%;
         height: 5px;
-        background: linear-gradient(90deg, #25bdbf 25%, #f4f1f1 20%);
+        background: linear-gradient(90deg, #25bdbf 33%, #f4f1f1 20%);
         outline: none;
         opacity: 0.7;
         border-radius: 3px;
@@ -68,7 +68,7 @@
         -webkit-appearance: none;
         width: 90%;
         height: 5px;
-        background: linear-gradient(90deg, #25bdbf 66%, #f4f1f1 40%);
+        background: linear-gradient(90deg, #25bdbf 50%, #f4f1f1 40%);
         outline: none;
         opacity: 0.7;
         border-radius: 3px;
@@ -174,6 +174,20 @@
         -moz-appearance: none;
       }
 
+      .error-container {
+        width: 78%;
+        height: 0;
+        display: flex;
+      }
+
+      .error-message {
+        color: red;
+        flex: 1;
+        text-align: right;
+        align-items: flex-end;
+        font-size: 12px;
+      }
+
       .selectable {
         width: 43%;
       }
@@ -239,7 +253,8 @@
         border-radius: 3px;
         font-size: 12px;
         color: #878787;
-        padding: 3px 35px 3px 3px;
+        padding: 3px;
+        width: 75px;
       }
 
       .btn {
@@ -277,7 +292,7 @@
               type="range"
               step="1000"
               min="0"
-              max="200000"
+              max="150000"
               value="50000"
               class="loan-slider"
               id="loan-range"
@@ -292,7 +307,7 @@
               type="range"
               step="1000"
               min="0"
-              max="15000"
+              max="20000"
               value="10000"
               class="balloon-slider"
               id="balloon-range"
@@ -302,8 +317,6 @@
         <div class="rows">
           <div class="row">
             <span class="label-text">INTEREST RATE</span>
-            <!-- interest rate is stuck at 4%. Is it supposed to be changeable? -->
-            <!-- <span class="selectable"><span class="value">4.0%</span></span> -->
             <span class="selectable"
               ><input
                 type="text"
@@ -311,6 +324,9 @@
                 class="interest"
                 value="4.00%"
             /></span>
+          </div>
+          <div id="error-container" class="error-container">
+            <span id="error" class="error-message"></span>
           </div>
           <div class="row">
             <div class="label-text">LENGTH</div>
@@ -328,8 +344,8 @@
             <span class="label-text">PAYMENT FREQUENCY</span>
             <span class="selectable">
               <select name="frequency" id="frequencyValue">
-                <option value="52">WEEKLY</option>
-                <option value="26">FORTNIGHTLY</option>
+                <option value="52.1786">WEEKLY</option>
+                <option value="26.0893">FORTNIGHTLY</option>
                 <option value="12">MONTHLY</option>
               </select></span
             >
@@ -341,7 +357,7 @@
           <div class="label-text">YOUR TOTAL PAYMENT WILL BE</div>
           <div class="big-total">
             <span class="dollar-sign">$</span
-            ><span id="dollars" class="dollars">500</span
+            ><span id="dollars" class="dollars">400</span
             ><span class="cents">.00</span>
           </div>
           <div class="borrowed-container">
@@ -367,9 +383,13 @@
       var lengthValue = document.getElementById("lengthValue");
       var frequencyValue = document.getElementById("frequencyValue");
       var interestInput = document.getElementById("interest-amount");
+      var errorContainer = document.getElementById("error-container");
+      var error = document.getElementById("error");
       var interestRate = 4;
 
+      // currency formatter
       var getCurrency = function (price) {
+        if (price < 0) return "0";
         if (price.length > 3) {
           var arr = price.split("");
           var formattedArr = [];
@@ -384,19 +404,26 @@
         return price;
       };
 
+      var calculate = function () {
+        var value = (
+          ((loanSlider.value - balloonSlider.value) *
+            (parseFloat(interestRate) / 100) +
+            (loanSlider.value - balloonSlider.value)) /
+          (frequencyValue.value * lengthValue.value)
+        ).toFixed(0);
+        if (value < 0) {
+          repayments.innerHTML = 0;
+        } else {
+          repayments.innerHTML = value;
+        }
+      };
+
       // actions to occur when moving the loan slider
       loanSlider.oninput = function () {
         loanAmountOutput.innerHTML = "$" + getCurrency(this.value);
         amountOutput.innerHTML =
           "$" + getCurrency((this.value - balloonSlider.value).toString());
-        repayments.innerHTML = (
-          ((this.value - balloonSlider.value) *
-            (parseFloat(interestRate) / 100) +
-            (this.value - balloonSlider.value)) /
-          (frequencyValue.value * lengthValue.value)
-        )
-          .toFixed(0)
-          .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+        calculate();
       };
 
       // actions to occur when moving the balloon slider
@@ -404,22 +431,18 @@
         balloonAmountOutput.innerHTML = "$" + getCurrency(this.value);
         amountOutput.innerHTML =
           "$" + getCurrency((loanSlider.value - this.value).toString());
-        repayments.innerHTML = (
-          ((loanSlider.value - this.value) * (parseFloat(interestRate) / 100) +
-            (loanSlider.value - this.value)) /
-          (frequencyValue.value * lengthValue.value)
-        ).toFixed(0);
+        calculate();
       };
 
       // dynamically adjust the background colors
       loanSlider.addEventListener("mousemove", function () {
-        var x = loanSlider.value / 2000;
+        var x = loanSlider.value / 1500;
         var color =
           "linear-gradient(90deg, #25bdbf " + x + "%, #f4f1f1 " + x + "%)";
         loanSlider.style.background = color;
       });
       balloonSlider.addEventListener("mousemove", function () {
-        var x = balloonSlider.value / 150;
+        var x = balloonSlider.value / 200;
         var color =
           "linear-gradient(90deg, #25bdbf " + x + "%, #f4f1f1 " + x + "%)";
         balloonSlider.style.background = color;
@@ -427,39 +450,35 @@
 
       // actions to occur when changing repayment frequency
       frequencyValue.onchange = function () {
-        repayments.innerHTML = (
-          ((loanSlider.value - balloonSlider.value) *
-            (parseFloat(interestRate) / 100) +
-            (loanSlider.value - balloonSlider.value)) /
-          (this.value * lengthValue.value)
-        ).toFixed(0);
+        calculate();
       };
 
       // changes to occur when changing the length of loan
       lengthValue.onchange = function () {
-        repayments.innerHTML = (
-          ((loanSlider.value - balloonSlider.value) *
-            (parseFloat(interestRate) / 100) +
-            (loanSlider.value - balloonSlider.value)) /
-          (frequencyValue.value * this.value)
-        ).toFixed(0);
+        calculate();
       };
 
       interestInput.onfocus = function () {
-        interestInput.value = interestRate.toFixed(2);
+        interestInput.value = parseFloat(interestRate).toFixed(2);
       };
 
       interestInput.onblur = function () {
         if (parseFloat(interestInput.value).toFixed(2) === "NaN") {
-          alert("Must enter number");
+          errorContainer.style.height = "auto";
+          error.innerHTML = "Only enter numbers";
         } else if (parseFloat(interestInput.value).toFixed(2) < 0) {
-          alert("Must be more than 0");
-        } else if (parseFloat(interestInput.value).toFixed(2) > 99) {
-          alert("Must be less than 100");
+          errorContainer.style.height = "auto";
+          error.innerHTML = "Enter more than 0";
+        } else if (parseFloat(interestInput.value).toFixed(2) > 20) {
+          errorContainer.style.height = "auto";
+          error.innerHTML = "Enter less than 20";
         } else {
+          errorContainer.style.height = 0;
+          error.innerHTML = "";
           interestInput.value =
             parseFloat(interestInput.value).toFixed(2) + "%";
           interestRate = interestInput.value;
+          calculate();
         }
       };
     </script>
