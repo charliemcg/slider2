@@ -43,10 +43,20 @@
 
       .slide-container-amount {
         font-size: 14px;
-        background: #eefafa;
         width: 30%;
         padding: 3px 0px 3px 10px;
         border-radius: 3px;
+        font-family: "Arial";
+        display: inline-block;
+        padding: 3px 0px 3px 10px;
+        outline: 0;
+        border: 0px solid #000000;
+        border-radius: 3px;
+        background: #eefafa;
+        color: #000000;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
       }
 
       .slide-wrapper {
@@ -332,7 +342,12 @@
       <div class="left-section">
         <div class="slide-container">
           <div class="slide-container-label">LOAN AMOUNT</div>
-          <div id="loan-amount" class="slide-container-amount">$50,000</div>
+          <input
+            id="loan-amount"
+            class="slide-container-amount"
+            type="text"
+            value="$50,000"
+          />
           <div class="slide-wrapper">
             <input
               type="range"
@@ -347,7 +362,12 @@
         </div>
         <div class="slide-container">
           <div class="slide-container-label">BALLOON PAYMENT</div>
-          <div id="balloon-amount" class="slide-container-amount">$0</div>
+          <input
+            id="balloon-amount"
+            class="slide-container-amount"
+            type="text"
+            value="$0"
+          />
           <div class="slide-wrapper">
             <input
               type="range"
@@ -405,7 +425,7 @@
           <div class="label-text">YOUR TOTAL PAYMENT WILL BE</div>
           <div class="big-total">
             <span class="dollar-sign">$</span
-            ><span id="dollars" class="dollars">500</span
+            ><span id="dollars" class="dollars">499</span
             ><span class="cents">.00</span>
           </div>
           <div class="borrowed-container">
@@ -468,7 +488,7 @@
 
       // actions to occur when moving the loan slider
       loanSlider.oninput = function () {
-        loanAmountOutput.innerHTML = "$" + getCurrency(this.value);
+        loanAmountOutput.value = "$" + getCurrency(this.value);
         amountOutput.innerHTML =
           "$" + getCurrency((this.value - balloonSlider.value).toString());
         calculate();
@@ -476,7 +496,7 @@
 
       // actions to occur when moving the balloon slider
       balloonSlider.oninput = function () {
-        balloonAmountOutput.innerHTML = "$" + getCurrency(this.value);
+        balloonAmountOutput.value = "$" + getCurrency(this.value);
         amountOutput.innerHTML =
           "$" + getCurrency((loanSlider.value - this.value).toString());
         calculate();
