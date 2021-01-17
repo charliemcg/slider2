@@ -43,6 +43,10 @@
 
       .slide-container-amount {
         font-size: 14px;
+        background: #eefafa;
+        width: 30%;
+        padding: 3px 0px 3px 10px;
+        border-radius: 3px;
       }
 
       .slide-wrapper {
@@ -375,7 +379,7 @@
             <div class="selectable">
               <select name="length" id="lengthValue">
                 <option value="1">1 YEAR</option>
-                <option value="2">2 YEARS</option>
+                <option value="2" selected="selected">2 YEARS</option>
                 <option value="3">3 YEARS</option>
                 <option value="4">4 YEARS</option>
                 <option value="5">5 YEARS</option>
@@ -401,7 +405,7 @@
           <div class="label-text">YOUR TOTAL PAYMENT WILL BE</div>
           <div class="big-total">
             <span class="dollar-sign">$</span
-            ><span id="dollars" class="dollars">400</span
+            ><span id="dollars" class="dollars">500</span
             ><span class="cents">.00</span>
           </div>
           <div class="borrowed-container">
@@ -449,12 +453,12 @@
       };
 
       var calculate = function () {
-        var value = (
+        var value = Math.ceil(
           ((loanSlider.value - balloonSlider.value) *
             (parseFloat(interestRate) / 100) +
             (loanSlider.value - balloonSlider.value)) /
-          (frequencyValue.value * lengthValue.value)
-        ).toFixed(0);
+            (frequencyValue.value * lengthValue.value)
+        );
         if (value < 0) {
           repayments.innerHTML = 0;
         } else {
