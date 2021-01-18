@@ -348,6 +348,9 @@
             type="text"
             value="$50,000"
           />
+          <div id="loan-error-container" class="error-container">
+            <span id="loan-error" class="error-message"></span>
+          </div>
           <div class="slide-wrapper">
             <input
               type="range"
@@ -453,6 +456,8 @@
       var interestInput = document.getElementById("interest-amount");
       var errorContainer = document.getElementById("error-container");
       var error = document.getElementById("error");
+      var loanErrorContainer = document.getElementById("loan-error-container");
+      var loanError = document.getElementById("loan-error");
       var interestRate = 4;
 
       // currency formatter
@@ -524,6 +529,36 @@
       // changes to occur when changing the length of loan
       lengthValue.onchange = function () {
         calculate();
+      };
+
+      loanAmountOutput.onfocus = function () {
+        loanAmountOutput.value = loanSlider.value;
+      };
+
+      loanAmountOutput.onblur = function () {
+        if (parseFloat(loanAmountOutput.value).toFixed(2) === "NaN") {
+          loanErrorContainer.style.height = "auto";
+          loanError.innerHTML = "Only enter numbers";
+        } else if (parseFloat(loanAmountOutput.value).toFixed(2) < 0) {
+          loanErrorContainer.style.height = "auto";
+          loanError.innerHTML = "Enter more than 0";
+        } else if (parseFloat(loanAmountOutput.value).toFixed(2) > 200000) {
+          loanErrorContainer.style.height = "auto";
+          loanError.innerHTML = "Enter less than 200,000";
+        } else {
+          loanErrorContainer.style.height = 0;
+          loanError.innerHTML = "";
+          loanSlider.value = this.value;
+          var color =
+            "linear-gradient(90deg, #25bdbf " +
+            this.value / 2000 +
+            "%, #f4f1f1 " +
+            this.value / 2000 +
+            "%)";
+          loanSlider.style.background = color;
+          loanAmountOutput.value = "$" + getCurrency(this.value);
+          calculate();
+        }
       };
 
       interestInput.onfocus = function () {
