@@ -472,6 +472,8 @@
       var balloonErrorContainer = document.getElementById("balloon-error-container");
       var balloonError = document.getElementById("balloon-error");
       var interestRate = 4;
+      var loanSliderAmount = 50000;
+      var balloonSliderAmount = 0;
 
       // currency formatter
       var getCurrency = function (price) {
@@ -506,6 +508,7 @@
 
       // actions to occur when moving the loan slider
       loanSlider.oninput = function () {
+        loanSliderAmount = this.value;
         loanAmountOutput.value = "$" + getCurrency(this.value);
         amountOutput.innerHTML =
           "$" + getCurrency((this.value - balloonSlider.value).toString());
@@ -514,6 +517,7 @@
 
       // actions to occur when moving the balloon slider
       balloonSlider.oninput = function () {
+        balloonSliderAmount = this.value;
         balloonAmountOutput.value = "$" + getCurrency(this.value);
         amountOutput.innerHTML =
           "$" + getCurrency((loanSlider.value - this.value).toString());
@@ -545,7 +549,8 @@
       };
 
       loanAmountOutput.onfocus = function () {
-        loanAmountOutput.value = loanSlider.value;
+        // loanAmountOutput.value = loanSlider.value;
+        loanAmountOutput.value = loanSliderAmount;
       };
 
       loanAmountOutput.onblur = function () {
@@ -563,6 +568,7 @@
           loanErrorContainer.style.height = 0;
           loanError.innerHTML = "";
           loanSlider.value = newValue;
+          loanSliderAmount = newValue;
           var color =
             "linear-gradient(90deg, #25bdbf " +
             newValue / 2000 +
@@ -576,7 +582,8 @@
       };
 
       balloonAmountOutput.onfocus = function () {
-        balloonAmountOutput.value = balloonSlider.value;
+        // balloonAmountOutput.value = balloonSlider.value;
+        balloonAmountOutput.value = balloonSliderAmount;
       };
 
       balloonAmountOutput.onblur = function () {
@@ -594,6 +601,7 @@
           balloonErrorContainer.style.height = 0;
           balloonError.innerHTML = "";
           balloonSlider.value = newValue;
+          balloonSliderAmount = newValue;
           var color =
             "linear-gradient(90deg, #25bdbf " +
             newValue / 200 +
