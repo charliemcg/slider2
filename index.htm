@@ -200,6 +200,14 @@
         text-align: right;
         align-items: flex-end;
         font-size: 12px;
+       }
+
+      .slide-error-message {
+        color: red;
+        flex: 1;
+        text-align: left;
+        align-items: flex-end;
+        font-size: 12px;
       }
 
       .selectable {
@@ -349,7 +357,7 @@
             value="$50,000"
           />
           <div id="loan-error-container" class="error-container">
-            <span id="loan-error" class="error-message"></span>
+            <span id="loan-error" class="slide-error-message"></span>
           </div>
           <div class="slide-wrapper">
             <input
@@ -371,6 +379,9 @@
             type="text"
             value="$0"
           />
+          <div id="balloon-error-container" class="error-container">
+            <span id="balloon-error" class="slide-error-message"></span>
+          </div>
           <div class="slide-wrapper">
             <input
               type="range"
@@ -434,7 +445,7 @@
           <div class="borrowed-container">
             <div class="label-text">AMOUNT BORROWED</div>
             <div id="borrowed-amount" class="borrowed-amount-container">
-              $40,000
+              $50,000
             </div>
           </div>
           <!-- button doesn't do anything -->
@@ -458,6 +469,8 @@
       var error = document.getElementById("error");
       var loanErrorContainer = document.getElementById("loan-error-container");
       var loanError = document.getElementById("loan-error");
+      var balloonErrorContainer = document.getElementById("balloon-error-container");
+      var balloonError = document.getElementById("balloon-error");
       var interestRate = 4;
 
       // currency formatter
@@ -536,27 +549,59 @@
       };
 
       loanAmountOutput.onblur = function () {
-        if (parseFloat(loanAmountOutput.value).toFixed(2) === "NaN") {
+        if (parseFloat(loanAmountOutput.value).toFixed(0) === "NaN") {
           loanErrorContainer.style.height = "auto";
           loanError.innerHTML = "Only enter numbers";
-        } else if (parseFloat(loanAmountOutput.value).toFixed(2) < 0) {
+        } else if (parseFloat(loanAmountOutput.value).toFixed(0) < 0) {
           loanErrorContainer.style.height = "auto";
           loanError.innerHTML = "Enter more than 0";
-        } else if (parseFloat(loanAmountOutput.value).toFixed(2) > 200000) {
+        } else if (parseFloat(loanAmountOutput.value).toFixed(0) > 200000) {
           loanErrorContainer.style.height = "auto";
           loanError.innerHTML = "Enter less than 200,000";
         } else {
+          var newValue = parseFloat(this.value).toFixed(0)
           loanErrorContainer.style.height = 0;
           loanError.innerHTML = "";
-          loanSlider.value = this.value;
+          loanSlider.value = newValue;
           var color =
             "linear-gradient(90deg, #25bdbf " +
-            this.value / 2000 +
+            newValue / 2000 +
             "%, #f4f1f1 " +
-            this.value / 2000 +
+            newValue / 2000 +
             "%)";
           loanSlider.style.background = color;
-          loanAmountOutput.value = "$" + getCurrency(this.value);
+          loanAmountOutput.value = "$" + getCurrency(parseFloat(newValue).toFixed(0));
+          calculate();
+        }
+      };
+
+      balloonAmountOutput.onfocus = function () {
+        balloonAmountOutput.value = balloonSlider.value;
+      };
+
+      balloonAmountOutput.onblur = function () {
+        if (parseFloat(balloonAmountOutput.value).toFixed(0) === "NaN") {
+          balloonErrorContainer.style.height = "auto";
+          balloonError.innerHTML = "Only enter numbers";
+        } else if (parseFloat(balloonAmountOutput.value).toFixed(0) < 0) {
+          balloonErrorContainer.style.height = "auto";
+          balloonError.innerHTML = "Enter more than 0";
+        } else if (parseFloat(balloonAmountOutput.value).toFixed(0) > 20000) {
+          balloonErrorContainer.style.height = "auto";
+          balloonError.innerHTML = "Enter less than 20,000";
+        } else {
+          var newValue = parseFloat(this.value).toFixed(0)
+          balloonErrorContainer.style.height = 0;
+          balloonError.innerHTML = "";
+          balloonSlider.value = newValue;
+          var color =
+            "linear-gradient(90deg, #25bdbf " +
+            newValue / 200 +
+            "%, #f4f1f1 " +
+            newValue / 200 +
+            "%)";
+          balloonSlider.style.background = color;
+          balloonAmountOutput.value = "$" + getCurrency(parseFloat(newValue).toFixed(0));
           calculate();
         }
       };
