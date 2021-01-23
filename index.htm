@@ -576,6 +576,8 @@
             "%)";
           loanSlider.style.background = color;
           loanAmountOutput.value = "$" + getCurrency(parseFloat(newValue).toFixed(0));
+          amountOutput.innerHTML =
+          "$" + getCurrency((newValue - balloonSlider.value).toString());
           calculate();
         }
       };
@@ -608,6 +610,9 @@
             "%)";
           balloonSlider.style.background = color;
           balloonAmountOutput.value = "$" + getCurrency(parseFloat(newValue).toFixed(0));
+
+        amountOutput.innerHTML =
+          "$" + getCurrency((loanSlider.value - newValue).toString());
           calculate();
         }
       };
