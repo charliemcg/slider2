@@ -426,9 +426,6 @@
             <span class="label-text">PAYMENT FREQUENCY</span>
             <span class="selectable">
               <select name="frequency" id="frequencyValue">
-                <!-- original values -->
-                <!-- <option value="52.1786">WEEKLY</option>
-                <option value="26.0893">FORTNIGHTLY</option> -->
                 <option value="52">WEEKLY</option>
                 <option value="26">FORTNIGHTLY</option>
                 <option value="12">MONTHLY</option>
@@ -496,27 +493,13 @@
       };
 
       var calculate = function () {
-        // var value = Math.ceil(
-        //   ((loanSlider.value - balloonSlider.value) *
-        //     (parseFloat(interestRate) / 100) +
-        //     (loanSlider.value - balloonSlider.value)) /
-        //     (frequencyValue.value * lengthValue.value)
-        // );
-
-        // var value = ((loanSlider.value - balloonSlider.value) * (parseFloat(interestRate) / 100) + (loanSlider.value - balloonSlider.value)) / (frequencyValue.value * lengthValue.value)
-        
-        // var calculatedInterest = parseFloat(interestRate) / 100 / frequencyValue.value;
-        // var x = Math.pow(1 + calculatedInterest, (lengthValue.value * frequencyValue.value));
-        // var calculation = ((loanSlider.value - balloonSlider.value) * x * calculatedInterest)/(x-1);
         var calculatedInterest = parseFloat(interestRate) / 100 / frequencyValue.value;
         var x = Math.pow(1 + calculatedInterest, (lengthValue.value * frequencyValue.value));
         var calculation = ((loanSlider.value - balloonSlider.value) * x * calculatedInterest)/(x-1);
         
-        // if (value < 0) {
         if(calculation < 0) {
           repayments.innerHTML = 0;
         } else {
-          // repayments.innerHTML = value;
           repayments.innerHTML = Math.round(calculation);
         }
       };
@@ -578,7 +561,6 @@
           loanErrorContainer.style.height = "auto";
           loanError.innerHTML = "Enter less than 200,000";
         } else {
-          // var newValue = parseFloat(this.value).toFixed(0)
           var newValue = parseFloat(this.value)
           loanErrorContainer.style.height = 0;
           loanError.innerHTML = "";
@@ -591,7 +573,6 @@
             newValue / 2000 +
             "%)";
           loanSlider.style.background = color;
-          // loanAmountOutput.value = "$" + getCurrency(parseFloat(newValue).toFixed(0));
           loanAmountOutput.value = "$" + getCurrency(parseFloat(newValue));
           amountOutput.innerHTML = "$" + getCurrency((newValue - balloonSlider.value).toString());
           calculate();
@@ -613,7 +594,6 @@
           balloonErrorContainer.style.height = "auto";
           balloonError.innerHTML = "Enter less than 20,000";
         } else {
-          // var newValue = parseFloat(this.value).toFixed(0)
           var newValue = parseFloat(this.value)
           balloonErrorContainer.style.height = 0;
           balloonError.innerHTML = "";
@@ -626,7 +606,6 @@
             newValue / 200 +
             "%)";
           balloonSlider.style.background = color;
-          // balloonAmountOutput.value = "$" + getCurrency(parseFloat(newValue).toFixed(0));
           balloonAmountOutput.value = "$" + getCurrency(parseFloat(newValue));
           amountOutput.innerHTML = "$" + getCurrency((loanSlider.value - newValue).toString());
           calculate();
@@ -634,7 +613,6 @@
       };
 
       interestInput.onfocus = function () {
-        // interestInput.value = parseFloat(interestRate).toFixed(2);
         interestInput.value = parseFloat(interestRate);
       };
 
@@ -651,8 +629,6 @@
         } else {
           errorContainer.style.height = 0;
           error.innerHTML = "";
-          // interestInput.value =
-          //   parseFloat(interestInput.value).toFixed(2) + "%";
           interestInput.value = parseFloat(interestInput.value) + "%"
           interestRate = interestInput.value;
           calculate();
