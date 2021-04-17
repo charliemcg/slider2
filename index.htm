@@ -440,7 +440,7 @@
           <div class="big-total">
             <span class="dollar-sign">$</span
             ><span id="dollars" class="dollars">499</span
-            ><span class="cents">.00</span>
+            ><span id="cents" class="cents">.00</span>
           </div>
           <div class="borrowed-container">
             <div class="label-text">AMOUNT BORROWED</div>
@@ -462,6 +462,7 @@
       var balloonAmountOutput = document.getElementById("balloon-amount");
       var amountOutput = document.getElementById("borrowed-amount");
       var repayments = document.getElementById("dollars");
+      var cents = document.getElementById("cents");
       var lengthValue = document.getElementById("lengthValue");
       var frequencyValue = document.getElementById("frequencyValue");
       var interestInput = document.getElementById("interest-amount");
@@ -493,14 +494,29 @@
       };
 
       var calculate = function () {
-        var calculatedInterest = parseFloat(interestRate) / 100 / frequencyValue.value;
-        var x = Math.pow(1 + calculatedInterest, (lengthValue.value * frequencyValue.value));
-        var calculation = ((loanSlider.value - balloonSlider.value) * x * calculatedInterest)/(x-1);
         
-        if(calculation < 0) {
+        // https://mortgagecalculator.mes.fm/balloon-payment-formula
+        var ir = parseFloat(interestRate) / 100 / frequencyValue.value; 
+        var np = (lengthValue.value * frequencyValue.value);
+        var pv = loanSlider.value;
+        var fv = balloonSlider.value;
+
+        var a = Math.pow((1 + ir), np);
+        var b = ir * pv * a;
+        var c = a - 1;
+        var d = ir * fv;
+        var e = Math.pow((1 + ir), (np + 1));
+        var f = e - (1 + ir);
+        var g = b / c;
+        var h = d / f;
+        var i = g - h;
+
+        if(i <= 0) {
           repayments.innerHTML = 0;
+          cents.innerHTML = ".00";
         } else {
-          repayments.innerHTML = Math.round(calculation);
+          repayments.innerHTML = Math.round(i);
+          cents.innerHTML = i.toString().substr(i.toString().indexOf("."), 3);
         }
       };
 
@@ -509,7 +525,7 @@
         loanSliderAmount = this.value;
         loanAmountOutput.value = "$" + getCurrency(this.value);
         amountOutput.innerHTML =
-          "$" + getCurrency((this.value - balloonSlider.value).toString());
+          "$" + getCurrency((this.value).toString());
         calculate();
       };
 
@@ -518,7 +534,7 @@
         balloonSliderAmount = this.value;
         balloonAmountOutput.value = "$" + getCurrency(this.value);
         amountOutput.innerHTML =
-          "$" + getCurrency((loanSlider.value - this.value).toString());
+          "$" + getCurrency((loanSlider.value).toString());
         calculate();
       };
 
@@ -574,7 +590,7 @@
             "%)";
           loanSlider.style.background = color;
           loanAmountOutput.value = "$" + getCurrency(parseFloat(newValue));
-          amountOutput.innerHTML = "$" + getCurrency((newValue - balloonSlider.value).toString());
+          amountOutput.innerHTML = "$" + getCurrency((newValue).toString());
           calculate();
         }
       };
@@ -607,7 +623,7 @@
             "%)";
           balloonSlider.style.background = color;
           balloonAmountOutput.value = "$" + getCurrency(parseFloat(newValue));
-          amountOutput.innerHTML = "$" + getCurrency((loanSlider.value - newValue).toString());
+          amountOutput.innerHTML = "$" + getCurrency((loanSlider.value).toString());
           calculate();
         }
       };
